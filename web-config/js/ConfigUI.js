@@ -5,6 +5,7 @@ const KEY_CHANNEL_ID = "keyChannel";
 const SHIFT_KEY_ID = "shiftKey";
 const SEND_ALL_KEY_ID = "sendAllKey";
 const KEY_TYPE_ID = "keyType";
+const SWITCH_BEHAVIOR_ID = "switchBehavior";
 const KEY_VALUE_ID = "keyValue";
 const KEY_SHIFT_VALUE_ID = "keyShiftValue";
 const KNOB_CHANNEL_ID = "knobChannel";
@@ -102,7 +103,7 @@ class ConfigUI {
         // Keys
         let keysSection = this._generateSection();
         for (let i = 0; i < this.device.numKeys; i++) {
-            keysSection.appendChild(this._generateItem(`Key ${i + 1}`, [`${KEY_TYPE_ID}${i + 1}`, `${KEY_VALUE_ID}${i + 1}`, `${KEY_SHIFT_VALUE_ID}${i + 1}`], ["Type", "Value", "Shift Value"], [keyTypes, midiRange, midiRange]));
+            keysSection.appendChild(this._generateItem(`Key ${i + 1}`, [`${KEY_TYPE_ID}${i + 1}`, `${KEY_VALUE_ID}${i + 1}`, `${KEY_SHIFT_VALUE_ID}${i + 1}`, `${SWITCH_BEHAVIOR_ID}${i + 1}`], ["Type", "Value", "Shift Value", "Behavior"], [keyTypes, midiRange, midiRange, ["Momentary", "Toggle"]]));
         }
         settings.appendChild(keysSection);
 
@@ -179,6 +180,7 @@ class ConfigUI {
 
         for (let i = 0; i < configUI.device.numKeys; i++) {
             document.getElementById(`${KEY_TYPE_ID}${i + 1}`).selectedIndex = configUI.device.keyTypes[i];
+            document.getElementById(`${SWITCH_BEHAVIOR_ID}${i + 1}`).selectedIndex = configUI.device.switchBehaviors[i];
             document.getElementById(`${KEY_VALUE_ID}${i + 1}`).selectedIndex = configUI.device.keyValues[i];
             document.getElementById(`${KEY_SHIFT_VALUE_ID}${i + 1}`).selectedIndex = configUI.device.keyShiftValues[i];
         }
@@ -303,6 +305,10 @@ class ConfigUI {
         } else if (event.target.id.startsWith(KEY_TYPE_ID)) {
             let index = parseInt(event.target.id.replace(KEY_TYPE_ID, "")) - 1;
             configUI.device.keyTypes[index] = event.target.selectedIndex;
+
+        } else if (event.target.id.startsWith(SWITCH_BEHAVIOR_ID)) {
+            let index = parseInt(event.target.id.replace(SWITCH_BEHAVIOR_ID, "")) - 1;
+            configUI.device.switchBehaviors[index] = event.target.selectedIndex;
 
         } else if (event.target.id.startsWith(KEY_VALUE_ID)) {
             let index = parseInt(event.target.id.replace(KEY_VALUE_ID, "")) - 1;
